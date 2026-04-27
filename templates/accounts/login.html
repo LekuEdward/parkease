@@ -1,0 +1,201 @@
+{% load static crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ParkEase — Sign In</title>
+  <link rel="icon" href="{% static 'assets/logo.png' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{% static 'css/parkease.css' %}" rel="stylesheet">
+  <style>
+    body { background: #0a1540; margin: 0; min-height: 100vh; }
+
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+    }
+
+    /* ── Left hero panel ── */
+    .lp-left {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 56px;
+      overflow: hidden;
+    }
+    .lp-left__bg {
+      position: absolute; inset: 0;
+      background-image: url('{% static "assets/parking-night.webp" %}');
+      background-size: cover;
+      background-position: center;
+    }
+    .lp-left__overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg,rgba(10,21,64,0.75) 0%,rgba(6,12,36,0.92) 100%);
+    }
+    .lp-left__content { position: relative; z-index: 2; }
+    .lp-left__logo img {
+      width: 96px; border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+      margin-bottom: 28px;
+    }
+    .lp-tagline {
+      font-size: 2.6rem; font-weight: 800;
+      color: #fff; line-height: 1.15;
+      letter-spacing: -0.5px; margin-bottom: 10px;
+    }
+    .lp-tagline span { color: #4ade80; }
+    .lp-sub {
+      font-family: monospace; font-size: 11px;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,0.45); margin-bottom: 32px;
+    }
+    .lp-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .lp-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 30px; padding: 6px 16px;
+      font-size: 12.5px; font-weight: 600;
+      color: rgba(255,255,255,0.82);
+    }
+    .lp-chip__dot { width:7px; height:7px; border-radius:50%; background:#4ade80; }
+
+    /* ── Right form panel — WIDER ── */
+    .lp-right {
+      width: 520px;            /* wider than before */
+      flex-shrink: 0;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 56px;      /* more padding */
+      box-shadow: -10px 0 48px rgba(0,0,0,0.18);
+    }
+    .lp-right__logo { text-align: center; margin-bottom: 36px; }
+    .lp-right__logo img {
+      width: 80px; border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .lp-right__logo h2 {
+      font-size: 26px; font-weight: 800;
+      color: var(--pe-navy); margin: 12px 0 4px;
+    }
+    .lp-right__logo p {
+      font-family: monospace; font-size: 10.5px;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: #94a3b8; margin: 0;
+    }
+
+    /* Make form fields bigger */
+    .lp-right .form-control,
+    .lp-right input[type="text"],
+    .lp-right input[type="password"] {
+      height: 52px !important;
+      font-size: 15px !important;
+      border-radius: 10px !important;
+      border: 1.5px solid #e2e8f0 !important;
+      padding: 14px 16px !important;
+    }
+    .lp-right .form-control:focus {
+      border-color: var(--pe-navy) !important;
+      box-shadow: 0 0 0 3px rgba(20,32,96,0.12) !important;
+    }
+    .lp-right label {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: #334155 !important;
+      margin-bottom: 6px !important;
+    }
+    .lp-right .form-group, .lp-right .mb-3 { margin-bottom: 20px !important; }
+
+    @media (max-width: 900px) {
+      .lp-left { display: none; }
+      .lp-right { width: 100%; padding: 48px 32px; }
+    }
+  </style>
+</head>
+<body>
+<div class="login-wrap">
+
+  <!-- LEFT — Night parking image -->
+  <div class="lp-left">
+    <div class="lp-left__bg"></div>
+    <div class="lp-left__overlay"></div>
+    <div class="lp-left__content">
+      <div class="lp-left__logo">
+        <img src="{% static 'assets/logo.png' %}" alt="ParkEase">
+      </div>
+      <h1 class="lp-tagline">Smart parking.<br><span>Guaranteed safety.</span></h1>
+      <p class="lp-sub">Kampala, Uganda · Est. 2026</p>
+      <div class="lp-chips">
+        <span class="lp-chip"><span class="lp-chip__dot"></span>Vehicle Registration</span>
+        <span class="lp-chip"><span class="lp-chip__dot"></span>Automated Billing</span>
+        <span class="lp-chip"><span class="lp-chip__dot"></span>Tyre Clinic</span>
+        <span class="lp-chip"><span class="lp-chip__dot"></span>Battery Hire</span>
+        <span class="lp-chip"><span class="lp-chip__dot"></span>Revenue Reports</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT — Login form -->
+  <div class="lp-right">
+    <div class="lp-right__logo">
+      <img src="{% static 'assets/logo.png' %}" alt="ParkEase">
+      <h2>ParkEase</h2>
+      <p>Integrated Parking &amp; Vehicle Services</p>
+    </div>
+
+    {% if form.errors %}
+    <div class="alert alert-danger mb-4" style="border-radius:10px;font-size:14px">
+      <strong>⚠ Invalid username or password.</strong> Please check and try again.
+    </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.username.errors.0 }}</div>{% endif %}
+      </div>
+      <div class="mb-4">
+        <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+        {{ form.password }}
+        {% if form.password.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.password.errors.0 }}</div>{% endif %}
+      </div>
+      <button type="submit" class="btn btn-success w-100 fw-bold"
+              style="height:52px;font-size:16px;border-radius:10px;letter-spacing:0.3px">
+        Sign In to Dashboard →
+      </button>
+    </form>
+
+    <!-- 
+      NOTE FOR PRESENTER: Remove the block below before going live in production.
+      Demo credentials are shown here ONLY for evaluation/presentation purposes.
+    -->
+    <div class="mt-5 pt-4" style="border-top:1px dashed #e2e8f0">
+      <p style="font-family:monospace;font-size:10px;text-transform:uppercase;
+                letter-spacing:1.2px;color:#94a3b8;text-align:center;margin-bottom:14px">
+        Demo Accounts — For Evaluation Only
+      </p>
+      <div style="background:#f8fafc;border-radius:10px;padding:14px 18px;font-size:13px;
+                  font-family:monospace;color:#475569;line-height:2">
+        <div><strong style="color:var(--pe-navy)">admin</strong> / admin123 &nbsp;·&nbsp; System Admin</div>
+        <div><strong style="color:var(--pe-navy)">attendant</strong> / park2026 &nbsp;·&nbsp; Parking Attendant</div>
+        <div><strong style="color:var(--pe-navy)">manager</strong> / mgr2026 &nbsp;·&nbsp; Section Manager</div>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:28px;font-size:10px;color:#cbd5e1;font-family:monospace">
+      © 2026 ParkEase Systems Ltd. All rights reserved.
+    </p>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

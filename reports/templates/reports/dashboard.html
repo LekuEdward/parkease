@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Revenue Reports{% endblock %}
+{% block page_class %}pe-page--wide{% endblock %}
+
+{% block content %}
+
+<div class="pe-page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+  <div>
+    <h1>📊 Revenue Reports</h1>
+    <p>Daily financial summary for Parkville — all three sections.</p>
+  </div>
+  <!-- Date filter -->
+  <form method="get" class="d-flex align-items-center gap-2">
+    <label class="fw-semibold" style="font-size:13px">Filter by date:</label>
+    <input type="date" name="date"
+           value="{{ selected_date|date:'Y-m-d' }}"
+           class="form-control form-control-sm"
+           style="font-family:monospace;width:160px">
+    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+  </form>
+</div>
+
+<p class="text-muted mb-4" style="font-family:monospace;font-size:12px">
+  Showing data for: <strong>{{ selected_date|date:"l, d F Y" }}</strong>
+</p>
+
+<!-- Top stat summary -->
+<div class="pe-stats-grid mb-4">
+  <div class="pe-stat-card pe-stat-card--navy">
+    <span class="pe-stat-card__icon">💰</span>
+    <span class="pe-stat-card__label">Total Daily Revenue</span>
+    <div class="pe-stat-card__value" style="font-size:1.5rem">UGX {{ total_revenue|floatformat:0 }}</div>
+    <div class="pe-stat-card__meta">All 3 sections combined</div>
+  </div>
+  <div class="pe-stat-card pe-stat-card--green">
+    <span class="pe-stat-card__icon">🚗</span>
+    <span class="pe-stat-card__label">Vehicles Today</span>
+    <div class="pe-stat-card__value">{{ total_vehicles }}</div>
+    <div class="pe-stat-card__meta">Registered on selected date</div>
+  </div>
+  <div class="pe-stat-card pe-stat-card--amber">
+    <span class="pe-stat-card__icon">↗</span>
+    <span class="pe-stat-card__label">Parking Sign-outs</span>
+    <div class="pe-stat-card__value">{{ parking_signouts.count }}</div>
+    <div class="pe-stat-card__meta">Vehicles that left today</div>
+  </div>
+</div>
+
+<!-- Revenue cards with images -->
+<div class="pe-revenue-grid mb-4">
+
+  <!-- Parking -->
+  <div class="pe-rev-card">
+    <img class="pe-rev-card__img" src="{% static 'assets/parking-night.webp' %}" alt="Parking">
+    <div class="pe-rev-card__body" style="border-top:3px solid var(--pe-green)">
+      <div class="pe-rev-card__label">🅿 Parking Revenue</div>
+      <div class="pe-rev-card__amount">UGX {{ parking_revenue|floatformat:0 }}</div>
+      <div class="pe-rev-card__sub">{{ parking_signouts.count }} vehicles processed</div>
+    </div>
+  </div>
+
+  <!-- Tyre -->
+  <div class="pe-rev-card">
+    <img class="pe-rev-card__img" src="{% static 'assets/tyre.webp' %}" alt="Tyre Clinic">
+    <div class="pe-rev-card__body" style="border-top:3px solid var(--pe-amber)">
+      <div class="pe-rev-card__label">🔧 Tyre Clinic Revenue</div>
+      <div class="pe-rev-card__amount">UGX {{ tyre_revenue|floatformat:0 }}</div>
+      <div class="pe-rev-card__sub">{{ tyre_transactions.count }} services completed</div>
+    </div>
+  </div>
+
+  <!-- Battery -->
+  <div class="pe-rev-card">
+    <img class="pe-rev-card__img" src="{% static 'assets/battery-service.jpg' %}" alt="Battery">
+    <div class="pe-rev-card__body" style="border-top:3px solid var(--pe-blue)">
+      <div class="pe-rev-card__label">🔋 Battery Section Revenue</div>
+      <div class="pe-rev-card__amount">UGX {{ battery_revenue|floatformat:0 }}</div>
+      <div class="pe-rev-card__sub">{{ battery_transactions.count }} transactions</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Signed-out vehicles table -->
+<div class="pe-card mb-4">
+  <div class="pe-card__header">
+    <div class="pe-card__title">
+      🚗 Signed-Out Vehicles — {{ selected_date|date:"d M Y" }}
+    </div>
+    <span style="font-family:monospace;font-size:11px;color:var(--pe-muted)">
+      {{ parking_signouts.count }} records
+    </span>
+  </div>
+  <div class="pe-table-wrap">
+    <table class="pe-table">
+      <thead>
+        <tr>
+          <th>Receipt #</th>
+          <th>Plate</th>
+          <th>Driver</th>
+          <th>Vehicle Type</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Duration</th>
+          <th>Rate</th>
+          <th>Fee (UGX)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in parking_signouts %}
+        <tr>
+          <td>
+            <a href="{% url 'parking:receipt' s.receipt_number %}"
+               class="pe-mono" style="font-size:10.5px;color:var(--pe-navy);font-weight:700">
+              {{ s.receipt_number }}
+            </a>
+          </td>
+          <td><span class="pe-plate">{{ s.vehicle.plate_number }}</span></td>
+          <td>{{ s.vehicle.driver_name }}</td>
+          <td>{{ s.vehicle.get_vehicle_type_display }}</td>
+          <td class="pe-mono">{{ s.vehicle.arrival_time|date:"h:i A" }}</td>
+          <td class="pe-mono">{{ s.sign_out_time|date:"h:i A" }}</td>
+          <td class="pe-mono">{{ s.duration_hours }} hrs</td>
+          <td>
+            {% if s.rate_category == 'day' %}
+              <span class="pe-badge pe-badge--amber">Day</span>
+            {% elif s.rate_category == 'night' %}
+              <span class="pe-badge pe-badge--navy">Night</span>
+            {% else %}
+              <span class="pe-badge pe-badge--green">Short</span>
+            {% endif %}
+          </td>
+          <td><strong>{{ s.fee_charged|floatformat:0 }}</strong></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9" class="text-center py-4 text-muted">
+            No vehicles signed out on {{ selected_date|date:"d M Y" }}.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if parking_signouts %}
+  <div class="pe-grand-total">
+    <span class="pe-grand-total__label">Parking Grand Total:</span>
+    <span class="pe-grand-total__value">UGX {{ parking_revenue|floatformat:0 }}</span>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

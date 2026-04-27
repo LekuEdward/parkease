@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Edit Vehicle — {{ vehicle.plate_number }}{% endblock %}
+{% block content %}
+
+<div class="pe-page-header">
+  <h1 class="fw-bold mb-1" style="color:var(--pe-navy)">✏ Edit Vehicle — <span class="pe-plate">{{ vehicle.plate_number }}</span></h1>
+  <p class="text-muted">Update the vehicle registration details below.</p>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="pe-form-section">
+        <div class="pe-form-section__title">👤 Driver Information</div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+            {{ form.driver_name }}
+            {% if form.driver_name.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.driver_name.errors.0 }}</div>{% endif %}
+            <div class="form-text">{{ form.fields.driver_name.help_text }}</div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
+            {{ form.phone }}
+            {% if form.phone.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.phone.errors.0 }}</div>{% endif %}
+            <div class="form-text">{{ form.fields.phone.help_text }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pe-form-section">
+        <div class="pe-form-section__title">🚘 Vehicle Information</div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Vehicle Type <span class="text-danger">*</span></label>
+            {{ form.vehicle_type }}
+            {% if form.vehicle_type.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.vehicle_type.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Number Plate <span class="text-danger">*</span></label>
+            {{ form.plate_number }}
+            {% if form.plate_number.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.plate_number.errors.0 }}</div>{% endif %}
+            <div class="form-text">{{ form.fields.plate_number.help_text }}</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Vehicle Model &amp; Colour <span class="text-danger">*</span></label>
+          {{ form.model_color }}
+          {% if form.model_color.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.model_color.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="pe-nin-alert">⚠ NIN required only for Boda-boda. Exactly 14 characters — e.g. CM900000001234</div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">NIN Number</label>
+          {{ form.nin }}
+          {% if form.nin.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.nin.errors.0 }}</div>{% endif %}
+          <div class="form-text">{{ form.fields.nin.help_text }}</div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-warning fw-bold px-5 py-2">
+          ✏ Save Changes
+        </button>
+        <a href="{% url 'parking:vehicle_list' %}" class="btn btn-outline-secondary px-4 py-2">
+          ← Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

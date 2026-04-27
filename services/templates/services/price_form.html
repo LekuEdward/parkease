@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="pe-page-header">
+  <h1>💰 {{ title }}</h1>
+  <p>Set pricing for a tyre or battery service.</p>
+</div>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="pe-form-section">
+      <div class="pe-form-section__title">📋 Service Price Details</div>
+      <form method="post">{% csrf_token %}{% crispy form %}</form>
+    </div>
+    <a href="{% url 'services:price_list' %}" class="text-muted" style="font-size:13px">← Back to Prices</a>
+  </div>
+</div>
+{% endblock %}

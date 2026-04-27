@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags static %}
+{% block title %}Record Battery Service{% endblock %}
+{% block content %}
+<div class="pe-page-header">
+  <h1>🔋 Record Battery Service</h1>
+  <p>Fill in all details to record a battery hire or sales transaction.</p>
+</div>
+<div class="row">
+  <div class="col-lg-7">
+    <div class="pe-form-section">
+      <div class="pe-form-section__title">🔋 Battery Service Details</div>
+      <form method="post">{% csrf_token %}{% crispy form %}</form>
+    </div>
+    <a href="{% url 'services:battery_list' %}" class="text-muted mt-3 d-block" style="font-size:13px">← Back to Battery Transactions</a>
+  </div>
+  <div class="col-lg-5">
+    <img src="{% static 'assets/battery-service.jpg' %}" alt="Battery Section"
+         style="width:100%;border-radius:var(--pe-radius);object-fit:cover;height:200px">
+  </div>
+</div>
+{% endblock %}

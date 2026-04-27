@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Register Vehicle{% endblock %}
+{% block content %}
+
+<div class="pe-page-header">
+  <h1>🚗 Vehicle Registration</h1>
+  <p>Complete all fields carefully. A receipt number will be generated automatically on submission.</p>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <form method="post" id="register-form" novalidate>
+      {% csrf_token %}
+
+      <!-- Driver section -->
+      <div class="pe-form-section">
+        <div class="pe-form-section__title">👤 Driver Information</div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+            {{ form.driver_name }}
+            {% if form.driver_name.errors %}
+              <div class="text-danger mt-1" style="font-size:12px">{{ form.driver_name.errors.0 }}</div>
+            {% endif %}
+            <div class="form-text">Must start with a capital letter, letters only.</div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+              <div class="text-danger mt-1" style="font-size:12px">{{ form.phone.errors.0 }}</div>
+            {% endif %}
+            <div class="form-text">Format: 0700000000 or 0772000000</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vehicle section -->
+      <div class="pe-form-section">
+        <div class="pe-form-section__title">🚘 Vehicle Information</div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Vehicle Type <span class="text-danger">*</span></label>
+            {{ form.vehicle_type }}
+            {% if form.vehicle_type.errors %}
+              <div class="text-danger mt-1" style="font-size:12px">{{ form.vehicle_type.errors.0 }}</div>
+            {% endif %}
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Number Plate <span class="text-danger">*</span></label>
+            {{ form.plate_number }}
+            {% if form.plate_number.errors %}
+              <div class="text-danger mt-1" style="font-size:12px">{{ form.plate_number.errors.0 }}</div>
+            {% endif %}
+            <div class="form-text">Must start with <strong>U</strong>, alphanumeric, max 8 chars.</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Vehicle Model &amp; Colour <span class="text-danger">*</span></label>
+          {{ form.model_color }}
+          {% if form.model_color.errors %}
+            <div class="text-danger mt-1" style="font-size:12px">{{ form.model_color.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <!-- NIN section — for Boda-boda -->
+        <div class="pe-nin-alert">
+          ⚠ NIN is <strong>required</strong> for all Boda-boda registrations
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">NIN Number</label>
+          {{ form.nin }}
+          {% if form.nin.errors %}
+            <div class="text-danger mt-1" style="font-size:12px">{{ form.nin.errors.0 }}</div>
+          {% endif %}
+          <div class="form-text">Format: 2 letters + 8–10 characters + 1 letter — e.g. CM12345678A</div>
+        </div>
+      </div>
+
+      <!-- Fee schedule reference -->
+      <div class="pe-form-section" style="background:#f8fafc">
+        <div class="pe-form-section__title">💳 Parking Fee Schedule (reference)</div>
+        <div class="pe-table-wrap">
+          <table class="pe-table">
+            <thead>
+              <tr>
+                <th>Vehicle Type</th>
+                <th>Short Stay (&lt; 3 hrs)</th>
+                <th>Day Rate (6am–7pm)</th>
+                <th>Night Rate (7pm–6am)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Personal Car</td><td>UGX 2,000</td><td>UGX 3,000</td><td>UGX 2,000</td></tr>
+              <tr><td>Taxi</td><td>UGX 2,000</td><td>UGX 3,000</td><td>UGX 2,000</td></tr>
+              <tr><td>Truck</td><td>UGX 2,000</td><td>UGX 5,000</td><td>UGX 10,000</td></tr>
+              <tr><td>Coaster</td><td>UGX 3,000</td><td>UGX 4,000</td><td>UGX 2,000</td></tr>
+              <tr><td>Boda-boda</td><td>UGX 1,000</td><td>UGX 2,000</td><td>UGX 2,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-6">
+        🖨 Register Vehicle &amp; Generate Receipt
+      </button>
+
+      <div class="pe-tips-panel">
+        <strong>💡 Operator Tips</strong>
+        <ul>
+          <li>NIN is <strong>mandatory</strong> for all Boda-boda (motorcycle) registrations.</li>
+          <li>Double-check the plate number — it is used for sign-out lookup.</li>
+          <li>Plate must start with <strong>U</strong>, be alphanumeric, max 8 characters.</li>
+          <li>Names must start with a capital letter and contain letters only.</li>
+        </ul>
+      </div>
+    </form>
+  </div>
+
+  <!-- Side info panel -->
+  <div class="col-lg-4">
+    <div class="pe-card">
+      <div class="pe-card__header">
+        <div class="pe-card__title">ℹ Validation Rules</div>
+      </div>
+      <div class="pe-card__body" style="font-size:13px">
+        <p><strong>Driver Name:</strong><br>
+          Must start with a capital letter.<br>
+          Letters and spaces only. Min 3 characters.
+        </p>
+        <hr>
+        <p><strong>Number Plate:</strong><br>
+          Must start with <code>U</code>.<br>
+          Alphanumeric characters only.<br>
+          Maximum 8 characters total.
+        </p>
+        <hr>
+        <p><strong>Phone Number:</strong><br>
+          Ugandan format: 07xx or 06xx.<br>
+          Exactly 10 digits. e.g. 0701234567
+        </p>
+        <hr>
+        <p><strong>NIN (Boda-boda only):</strong><br>
+          2 letters + 8–10 chars + 1 letter.<br>
+          Example: <code>CM12345678A</code>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

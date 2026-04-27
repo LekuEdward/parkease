@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags static %}
+{% block title %}Process Sign-Out{% endblock %}
+{% block content %}
+
+<div class="pe-page-header">
+  <h1>↗ Process Sign-Out — <span class="pe-plate">{{ vehicle.plate_number }}</span></h1>
+  <p>Review the calculated fee, fill in receiver details, then confirm sign-out.</p>
+</div>
+
+<div class="row">
+  <div class="col-lg-7">
+    <div class="pe-form-section">
+      <div class="pe-form-section__title">🚗 Vehicle Details</div>
+      <div class="pe-detail-grid">
+        <div class="pe-detail-item"><label>Driver Name</label><span>{{ vehicle.driver_name }}</span></div>
+        <div class="pe-detail-item"><label>Vehicle Type</label><span>{{ vehicle.get_vehicle_type_display }}</span></div>
+        <div class="pe-detail-item"><label>Plate Number</label><span class="pe-plate">{{ vehicle.plate_number }}</span></div>
+        <div class="pe-detail-item"><label>Model &amp; Colour</label><span>{{ vehicle.model_color }}</span></div>
+        <div class="pe-detail-item"><label>Arrival Time</label><span class="pe-mono">{{ vehicle.arrival_time|date:"d M Y, h:i A" }}</span></div>
+        <div class="pe-detail-item"><label>Hours Parked</label><span class="pe-mono" style="color:var(--pe-navy);font-weight:800">{{ hours }} hrs</span></div>
+      </div>
+    </div>
+
+    <div class="pe-fee-display mb-4">
+      <div class="pe-fee-display__label">Calculated Parking Fee</div>
+      <div class="pe-fee-display__amount">UGX {{ fee|floatformat:0 }}</div>
+      <div class="pe-fee-display__rate">Rate Applied: {{ rate_label }}</div>
+    </div>
+
+    <div class="pe-form-section">
+      <div class="pe-form-section__title">👤 Receiver Information</div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Receiver Full Name <span class="text-danger">*</span></label>
+            {{ form.receiver_name }}
+            {% if form.receiver_name.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.receiver_name.errors.0 }}</div>{% endif %}
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-semibold">Phone Number <span class="text-danger">*</span></label>
+            {{ form.receiver_phone }}
+            {% if form.receiver_phone.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.receiver_phone.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 mb-3">
+            <label class="form-label fw-semibold">NIN Number <span class="text-danger">*</span></label>
+            {{ form.receiver_nin }}
+            {% if form.receiver_nin.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.receiver_nin.errors.0 }}</div>{% endif %}
+            <div class="form-text">Format: CM12345678A</div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <label class="form-label fw-semibold">Gender <span class="text-danger">*</span></label>
+            {{ form.receiver_gender }}
+            {% if form.receiver_gender.errors %}<div class="text-danger mt-1" style="font-size:12px">{{ form.receiver_gender.errors.0 }}</div>{% endif %}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success w-100 py-3 fw-bold fs-6">
+          ✅ Confirm Payment &amp; Sign Out — UGX {{ fee|floatformat:0 }}
+        </button>
+        <a href="{% url 'parking:signout_search' %}" class="btn btn-outline-secondary w-100 mt-2">← Cancel</a>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="pe-card">
+      <div class="pe-card__header"><div class="pe-card__title">🧾 Receipt Preview</div></div>
+      <div class="pe-card__body">
+        <div class="pe-receipt">
+          <div class="pe-receipt__header">
+            <img src="{% static 'assets/logo.png' %}" alt="ParkEase" style="width:48px;height:48px;border-radius:10px;object-fit:cover;margin:0 auto 8px;display:block">
+            <div class="pe-receipt__company">PARKEASE SYSTEMS LTD</div>
+            <div class="pe-receipt__address">Plot 45, Kampala Road, Kampala</div>
+          </div>
+          <hr class="pe-receipt__divider">
+          <div class="pe-receipt__row"><span class="pe-receipt__row-label">Date:</span><span class="pe-receipt__row-value">{{ now|date:"d M Y" }}</span></div>
+          <div class="pe-receipt__row"><span class="pe-receipt__row-label">Plate No:</span><span class="pe-receipt__row-value pe-plate">{{ vehicle.plate_number }}</span></div>
+          <div class="pe-receipt__row"><span class="pe-receipt__row-label">Vehicle:</span><span class="pe-receipt__row-value">{{ vehicle.get_vehicle_type_display }}</span></div>
+          <hr class="pe-receipt__divider">
+          <div class="pe-receipt__row"><span class="pe-receipt__row-label">Check-in:</span><span class="pe-receipt__row-value">{{ vehicle.arrival_time|date:"h:i A" }}</span></div>
+          <div class="pe-receipt__row"><span class="pe-receipt__row-label">Duration:</span><span class="pe-receipt__row-value pe-mono">{{ hours }} hours</span></div>
+          <div class="pe-receipt__row"><span class="pe-receipt__row-label">Rate:</span><span class="pe-receipt__row-value">{{ rate_label }}</span></div>
+          <div class="pe-receipt__total">
+            <span class="pe-receipt__total-label">TOTAL</span>
+            <span class="pe-receipt__total-value">UGX {{ fee|floatformat:0 }}</span>
+          </div>
+          <div class="pe-receipt__footer"><strong>THANK YOU FOR USING PARKEASE!</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

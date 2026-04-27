@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Service Prices{% endblock %}
+{% block content %}
+<div class="pe-page-header d-flex justify-content-between align-items-center">
+  <div>
+    <h1>💰 Service Price List</h1>
+    <p>Current pricing for tyre clinic and battery section services.</p>
+  </div>
+  {% if user.is_manager or user.is_admin %}
+  <a href="{% url 'services:set_price' %}" class="btn btn-primary">＋ Add / Set Price</a>
+  {% endif %}
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="pe-card mb-4">
+      <div class="pe-card__header">
+        <div class="pe-card__title">🔧 Tyre Clinic Prices</div>
+      </div>
+      <div class="pe-table-wrap">
+        <table class="pe-table">
+          <thead><tr><th>Service</th><th>Price (UGX)</th>{% if user.is_manager or user.is_admin %}<th></th>{% endif %}</tr></thead>
+          <tbody>
+            {% for p in prices %}
+            {% if "tyre" in p.service_type %}
+            <tr>
+              <td>{{ p.get_service_type_display }}</td>
+              <td><strong>{{ p.price|floatformat:0 }}</strong></td>
+              {% if user.is_manager or user.is_admin %}
+              <td><a href="{% url 'services:edit_price' p.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a></td>
+              {% endif %}
+            </tr>
+            {% endif %}
+            {% empty %}
+            <tr><td colspan="3" class="text-center py-3 text-muted">No tyre prices set.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="p-3 d-flex gap-2">
+        <a href="{% url 'services:tyre_list' %}" class="btn btn-warning btn-sm">View Tyre Transactions</a>
+        <a href="{% url 'services:tyre_add' %}" class="btn btn-outline-warning btn-sm">＋ Record Service</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="pe-card mb-4">
+      <div class="pe-card__header">
+        <div class="pe-card__title">🔋 Battery Section Prices</div>
+      </div>
+      <div class="pe-table-wrap">
+        <table class="pe-table">
+          <thead><tr><th>Service</th><th>Price (UGX)</th>{% if user.is_manager or user.is_admin %}<th></th>{% endif %}</tr></thead>
+          <tbody>
+            {% for p in prices %}
+            {% if "battery" in p.service_type %}
+            <tr>
+              <td>{{ p.get_service_type_display }}</td>
+              <td><strong>{{ p.price|floatformat:0 }}</strong></td>
+              {% if user.is_manager or user.is_admin %}
+              <td><a href="{% url 'services:edit_price' p.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a></td>
+              {% endif %}
+            </tr>
+            {% endif %}
+            {% empty %}
+            <tr><td colspan="3" class="text-center py-3 text-muted">No battery prices set.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="p-3 d-flex gap-2">
+        <a href="{% url 'services:battery_list' %}" class="btn btn-primary btn-sm">View Battery Transactions</a>
+        <a href="{% url 'services:battery_add' %}" class="btn btn-outline-primary btn-sm">＋ Record Service</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

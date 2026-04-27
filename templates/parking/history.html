@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Parking History{% endblock %}
+{% block content %}
+
+<div class="pe-page-header d-flex justify-content-between align-items-center">
+  <div>
+    <h1 class="fw-bold mb-1" style="color:var(--pe-navy)">🕐 Parking History</h1>
+    <p class="text-muted mb-0">Full log of all signed-out vehicles.</p>
+  </div>
+  <a href="{% url 'parking:vehicle_list' %}" class="btn btn-outline-secondary">
+    ← Back to Lot
+  </a>
+</div>
+
+<div class="pe-card">
+  <div class="pe-table-wrap">
+    <table class="pe-table">
+      <thead>
+        <tr>
+          <th>Receipt #</th>
+          <th>Plate</th>
+          <th>Driver</th>
+          <th>Vehicle Type</th>
+          <th>Check-in</th>
+          <th>Check-out</th>
+          <th>Duration</th>
+          <th>Rate</th>
+          <th>Fee (UGX)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in signouts %}
+        <tr>
+          <td>
+            <a href="{% url 'parking:receipt' s.receipt_number %}"
+               class="pe-mono fw-bold" style="font-size:11px;color:var(--pe-navy)">
+              {{ s.receipt_number }}
+            </a>
+          </td>
+          <td><span class="pe-plate">{{ s.vehicle.plate_number }}</span></td>
+          <td>{{ s.vehicle.driver_name }}</td>
+          <td>{{ s.vehicle.get_vehicle_type_display }}</td>
+          <td class="pe-mono">{{ s.vehicle.arrival_time|date:"d M, h:i A" }}</td>
+          <td class="pe-mono">{{ s.sign_out_time|date:"d M, h:i A" }}</td>
+          <td class="pe-mono">{{ s.duration_hours }} hrs</td>
+          <td>
+            {% if s.rate_category == 'day' %}
+              <span class="pe-badge pe-badge--amber">Day</span>
+            {% elif s.rate_category == 'night' %}
+              <span class="pe-badge pe-badge--navy">Night</span>
+            {% else %}
+              <span class="pe-badge pe-badge--green">Short</span>
+            {% endif %}
+          </td>
+          <td><strong>{{ s.fee_charged|floatformat:0 }}</strong></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="9" class="text-center py-5 text-muted">No sign-out history yet.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if signouts %}
+  <div class="pe-grand-total">
+    <span class="pe-grand-total__label">Total Revenue (All Time):</span>
+    <span class="pe-grand-total__value">UGX {{ total|floatformat:0 }}</span>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

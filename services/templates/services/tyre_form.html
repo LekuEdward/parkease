@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags static %}
+{% block title %}Record Tyre Service{% endblock %}
+{% block content %}
+<div class="pe-page-header">
+  <h1>🔧 Record Tyre Service</h1>
+  <p>Fill in all details to record a tyre clinic transaction.</p>
+</div>
+<div class="row">
+  <div class="col-lg-7">
+    <div class="pe-form-section">
+      <div class="pe-form-section__title">🔧 Tyre Service Details</div>
+      <form method="post">{% csrf_token %}{% crispy form %}</form>
+    </div>
+    <div class="pe-tips-panel">
+      <strong>💡 Tyre Services Available</strong>
+      <ul>
+        <li>Tyre Pressure Check — UGX 500</li>
+        <li>Puncture Fixing — UGX 5,000</li>
+        <li>Valve Replacement — UGX 5,000</li>
+      </ul>
+    </div>
+    <a href="{% url 'services:tyre_list' %}" class="text-muted mt-3 d-block" style="font-size:13px">← Back to Tyre Transactions</a>
+  </div>
+  <div class="col-lg-5">
+    <img src="{% static 'assets/tyre.webp' %}" alt="Tyre Clinic"
+         style="width:100%;border-radius:var(--pe-radius);object-fit:cover;height:200px">
+  </div>
+</div>
+{% endblock %}

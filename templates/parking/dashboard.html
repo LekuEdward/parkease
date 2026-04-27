@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<!-- Hero banner -->
+<div class="pe-hero mb-4">
+  <img class="pe-hero__img" src="{% static 'assets/parking-night.webp' %}" alt="ParkEase parking facility">
+  <div class="pe-hero__overlay"></div>
+  <div class="pe-hero__text">
+    <h2>Welcome back, {{ user.get_full_name|default:user.username }} 👋</h2>
+    <p>Kampala Parking Facility · Plot 45, Kampala Road · {{ today }}</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     ATTENDANT VIEW
+════════════════════════════════════ -->
+{% if user.is_attendant %}
+
+<div class="pe-stats-grid">
+  <div class="pe-stat-card pe-stat-card--green">
+    <span class="pe-stat-card__icon">🚗</span>
+    <span class="pe-stat-card__label">Vehicles Currently Parked</span>
+    <div class="pe-stat-card__value">{{ parked }}</div>
+    <div class="pe-stat-card__meta">Active in the lot right now</div>
+  </div>
+  <div class="pe-stat-card pe-stat-card--amber">
+    <span class="pe-stat-card__icon">↗</span>
+    <span class="pe-stat-card__label">Signed Out Today</span>
+    <div class="pe-stat-card__value">{{ signed_out }}</div>
+    <div class="pe-stat-card__meta">Vehicles that left today</div>
+  </div>
+  <div class="pe-stat-card pe-stat-card--navy">
+    <span class="pe-stat-card__icon">💰</span>
+    <span class="pe-stat-card__label">Parking Revenue Today</span>
+    <div class="pe-stat-card__value" style="font-size:1.3rem">
+      UGX {{ parking_revenue|floatformat:0 }}
+    </div>
+    <div class="pe-stat-card__meta">Collected from parking fees</div>
+  </div>
+</div>
+
+<div class="pe-card mb-4 mt-2">
+  <div class="pe-card__header">
+    <div class="pe-card__title">⚡ Quick Actions</div>
+  </div>
+  <div class="pe-quick-actions">
+    <a href="{% url 'parking:register' %}" class="btn btn-primary fw-bold">
+      ＋ Register New Arrival
+    </a>
+    <a href="{% url 'parking:signout_search' %}" class="btn btn-outline-primary">
+      ↗ Process Sign-out
+    </a>
+    <a href="{% url 'parking:vehicle_list' %}" class="btn btn-outline-secondary">
+      🚗 View All Vehicles
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION MANAGER VIEW
+════════════════════════════════════ -->
+{% elif user.is_manager %}
+
+<div class="pe-stats-grid">
+  <div class="pe-stat-card pe-stat-card--amber">
+    <span class="pe-stat-card__icon">🔧</span>
+    <span class="pe-stat-card__label">Tyre Services Today</span>
+    <div class="pe-stat-card__value">{{ tyre_today }}</div>
+    <div class="pe-stat-card__meta">Jobs completed today</div>
+  </div>
+  <div class="pe-stat-card pe-stat-card--blue">
+    <span class="pe-stat-card__icon">🔋</span>
+    <span class="pe-stat-card__label">Battery Transactions Today</span>
+    <div class="pe-stat-card__value">{{ battery_today }}</div>
+    <div class="pe-stat-card__meta">Hire and sales today</div>
+  </div>
+  <div class="pe-stat-card pe-stat-card--green">
+    <span class="pe-stat-card__icon">💰</span>
+    <span class="pe-stat-card__label">Services Revenue Today</span>
+    <div class="pe-stat-card__value" style="font-size:1.3rem">
+      UGX {{ tyre_revenue|floatformat:0|add:battery_revenue }}
+    </div>
+    <div class="pe-stat-card__meta">Tyre + Battery combined</div>
+  </div>
+</div>
+
+<div class="pe-card mb-4 mt-2">
+  <div class="pe-card__header">
+    <div class="pe-card__title">⚡ Quick Actions</div>
+  </div>
+  <div class="pe-quick-actions">
+    <a href="{% url 'services:tyre_add' %}" class="btn btn-warning fw-bold">
+      🔧 Record Tyre Service
+    </a>
+    <a href="{% url 'services:battery_add' %}" class="btn btn-primary">
+      🔋 Record Battery Service
+    </a>
+    <a href="{% url 'services:price_list' %}" class="btn btn-outline-secondary">
+      💰 Manage Prices
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     ADMIN VIEW — sees everything
+════════════════════════════════════ -->
+{% else %}
+
+<div class="pe-stats-grid">
+  <div class="pe-stat-card pe-stat-card--green">
+    <span class="pe-stat-card__icon">🚗</span>
+    <span class="pe-stat-card__label">Vehicles in Lot</span>
+    <div class="pe-stat-card__value">{{ parked }}</div>
+    <div class="pe-stat-card__meta">Currently parked</div>
+  </div>
+  <div class="pe-stat-card pe-stat-card--amber">
+    <span class="pe-stat-card__icon">🔧</span>
+    <span class="pe-stat-card__label">Services Today</span>
+    <div class="pe-stat-card__value">{{ tyre_today|add:battery_today }}</div>
+    <div class="pe-stat-card__meta">Tyre + Battery transactions</div>
+  </div>
+  <div class="pe-stat-card pe-stat-card--navy">
+    <span class="pe-stat-card__icon">💰</span>
+    <span class="pe-stat-card__label">Total Revenue Today</span>
+    <div class="pe-stat-card__value" style="font-size:1.2rem">
+      UGX {{ total_revenue|floatformat:0 }}
+    </div>
+    <div class="pe-stat-card__meta">All 3 sections combined</div>
+  </div>
+  <div class="pe-stat-card pe-stat-card--blue">
+    <span class="pe-stat-card__icon">↗</span>
+    <span class="pe-stat-card__label">Signed Out Today</span>
+    <div class="pe-stat-card__value">{{ signed_out }}</div>
+    <div class="pe-stat-card__meta">Parking departures today</div>
+  </div>
+</div>
+
+<!-- Revenue breakdown for admin -->
+<div class="row g-3 mb-4 mt-1">
+  <div class="col-md-4">
+    <div class="pe-card h-100" style="border-left:4px solid var(--pe-green)">
+      <div class="pe-card__body">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--pe-muted);margin-bottom:6px">🅿 Parking</div>
+        <div style="font-size:1.4rem;font-weight:800;color:var(--pe-navy)">UGX {{ parking_revenue|floatformat:0 }}</div>
+        <div style="font-size:12px;color:var(--pe-muted)">{{ signed_out }} vehicles processed</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="pe-card h-100" style="border-left:4px solid var(--pe-amber)">
+      <div class="pe-card__body">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--pe-muted);margin-bottom:6px">🔧 Tyre Clinic</div>
+        <div style="font-size:1.4rem;font-weight:800;color:var(--pe-navy)">UGX {{ tyre_revenue|floatformat:0 }}</div>
+        <div style="font-size:12px;color:var(--pe-muted)">{{ tyre_today }} services today</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="pe-card h-100" style="border-left:4px solid var(--pe-blue)">
+      <div class="pe-card__body">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--pe-muted);margin-bottom:6px">🔋 Battery</div>
+        <div style="font-size:1.4rem;font-weight:800;color:var(--pe-navy)">UGX {{ battery_revenue|floatformat:0 }}</div>
+        <div style="font-size:12px;color:var(--pe-muted)">{{ battery_today }} transactions today</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pe-card mb-4">
+  <div class="pe-card__header">
+    <div class="pe-card__title">⚡ Quick Actions</div>
+  </div>
+  <div class="pe-quick-actions">
+    <a href="{% url 'reports:dashboard' %}" class="btn btn-primary fw-bold">📊 Full Revenue Report</a>
+    <a href="{% url 'parking:register' %}" class="btn btn-outline-primary">＋ Register Vehicle</a>
+    <a href="{% url 'parking:signout_search' %}" class="btn btn-outline-secondary">↗ Sign-out Vehicle</a>
+    <a href="{% url 'accounts:user_list' %}" class="btn btn-outline-secondary">👥 Manage Users</a>
+  </div>
+</div>
+{% endif %}
+
+<!-- Recent arrivals table — shown to attendant and admin -->
+{% if user.is_attendant or user.is_admin %}
+<div class="pe-card">
+  <div class="pe-card__header">
+    <div class="pe-card__title">🕐 Vehicles Currently in Lot</div>
+    <a href="{% url 'parking:vehicle_list' %}" style="font-size:12px;color:var(--pe-navy)">View all →</a>
+  </div>
+  <div class="pe-table-wrap">
+    <table class="pe-table">
+      <thead>
+        <tr>
+          <th>Plate Number</th>
+          <th>Driver</th>
+          <th>Vehicle Type</th>
+          <th>Arrival Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in recent_arrivals %}
+        <tr>
+          <td><span class="pe-plate">{{ v.plate_number }}</span></td>
+          <td>{{ v.driver_name }}</td>
+          <td>{{ v.get_vehicle_type_display }}</td>
+          <td class="pe-mono">{{ v.arrival_time|date:"h:i A" }}</td>
+          <td>
+            <a href="{% url 'parking:signout_process' v.pk %}" class="btn btn-sm btn-outline-primary">
+              ↗ Sign Out
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="text-center py-4 text-muted">No vehicles currently in the lot.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

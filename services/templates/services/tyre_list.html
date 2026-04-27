@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Tyre Clinic{% endblock %}
+{% block content %}
+<div class="pe-page-header d-flex justify-content-between align-items-center">
+  <div>
+    <h1>🔧 Tyre Clinic Transactions</h1>
+    <p>All tyre service transactions recorded at the facility.</p>
+  </div>
+  <a href="{% url 'services:tyre_add' %}" class="btn btn-warning fw-bold">＋ Record Tyre Service</a>
+</div>
+
+<!-- Tyre image hero -->
+<div class="pe-hero mb-4">
+  <img class="pe-hero__img" src="{% static 'assets/tyre.webp' %}" alt="Tyre Clinic">
+  <div class="pe-hero__overlay"></div>
+  <div class="pe-hero__text">
+    <h2>🔧 Tyre Clinic Section</h2>
+    <p>Pressure · Puncture Fixing · Valve Replacement</p>
+  </div>
+</div>
+
+<div class="pe-card mb-3">
+  <div class="pe-stats-grid" style="padding:16px">
+    <div class="pe-stat-card pe-stat-card--amber">
+      <span class="pe-stat-card__label">Total Tyre Revenue</span>
+      <div class="pe-stat-card__value" style="font-size:1.4rem">UGX {{ total|floatformat:0 }}</div>
+    </div>
+    <div class="pe-stat-card pe-stat-card--navy">
+      <span class="pe-stat-card__label">Total Transactions</span>
+      <div class="pe-stat-card__value">{{ transactions.count }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="pe-card">
+  <div class="pe-table-wrap">
+    <table class="pe-table">
+      <thead>
+        <tr><th>Receipt #</th><th>Customer</th><th>Phone</th><th>Service</th><th>Amount (UGX)</th><th>Date</th></tr>
+      </thead>
+      <tbody>
+        {% for t in transactions %}
+        <tr>
+          <td class="pe-mono" style="font-size:11px;font-weight:700">{{ t.receipt_number }}</td>
+          <td>{{ t.customer_name }}</td>
+          <td class="pe-mono">{{ t.phone }}</td>
+          <td>{{ t.service.get_service_type_display|default:"—" }}</td>
+          <td><strong>{{ t.amount|floatformat:0 }}</strong></td>
+          <td>{{ t.date }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center py-4 text-muted">No tyre transactions yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

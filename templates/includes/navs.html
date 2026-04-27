@@ -1,0 +1,175 @@
+{% load static %}
+{% if user.is_authenticated %}
+<nav class="pe-topnav navbar navbar-expand-lg" style="background:var(--pe-navy);padding:0 24px;min-height:60px;box-shadow:0 2px 8px rgba(0,0,0,0.25);position:sticky;top:0;z-index:1050">
+
+  <!-- Brand -->
+  <a href="{% url 'parking:dashboard' %}" class="navbar-brand d-flex align-items-center gap-2" style="text-decoration:none">
+    <img src="{% static 'assets/logo.png' %}" style="width:34px;height:34px;border-radius:8px;object-fit:cover" alt="ParkEase">
+    <span style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-0.3px">ParkEase</span>
+  </a>
+
+  <!-- Mobile toggle -->
+  <button class="navbar-toggler border-0 ms-auto me-2" type="button"
+          data-bs-toggle="collapse" data-bs-target="#mainNav"
+          style="filter:invert(1)">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="mainNav">
+    <ul class="navbar-nav mx-auto gap-1">
+
+      <!-- Dashboard -->
+      <li class="nav-item">
+        <a href="{% url 'parking:dashboard' %}"
+           class="nav-link px-3 py-2 rounded"
+           style="color:{% if request.resolver_match.url_name == 'dashboard' %}#fff{% else %}rgba(255,255,255,0.72){% endif %};
+                  background:{% if request.resolver_match.url_name == 'dashboard' %}var(--pe-green-dark){% else %}transparent{% endif %};
+                  font-size:13.5px;font-weight:500">
+          ⊞ Dashboard
+        </a>
+      </li>
+
+      <!-- Parking dropdown -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle px-3 py-2 rounded"
+           href="#" role="button" data-bs-toggle="dropdown"
+           style="color:{% if request.resolver_match.app_name == 'parking' and request.resolver_match.url_name != 'dashboard' %}#fff{% else %}rgba(255,255,255,0.72){% endif %};
+                  background:{% if request.resolver_match.app_name == 'parking' and request.resolver_match.url_name != 'dashboard' %}var(--pe-green-dark){% else %}transparent{% endif %};
+                  font-size:13.5px;font-weight:500">
+          🚗 Parking
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark border-0 shadow"
+            style="background:#1e3a8a;min-width:190px;border-radius:10px;padding:6px">
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'parking:vehicle_list' %}">
+              🚗 Vehicles in Lot
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'parking:register' %}">
+              ＋ Register Vehicle
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'parking:signout_search' %}">
+              ↗ Sign-Out Vehicle
+            </a>
+          </li>
+          <li><hr class="dropdown-divider" style="border-color:rgba(255,255,255,0.15)"></li>
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'parking:history' %}">
+              🕐 Sign-Out History
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Services dropdown -->
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle px-3 py-2 rounded"
+           href="#" role="button" data-bs-toggle="dropdown"
+           style="color:{% if request.resolver_match.app_name == 'services' %}#fff{% else %}rgba(255,255,255,0.72){% endif %};
+                  background:{% if request.resolver_match.app_name == 'services' %}var(--pe-green-dark){% else %}transparent{% endif %};
+                  font-size:13.5px;font-weight:500">
+          🔧 Services
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark border-0 shadow"
+            style="background:#1e3a8a;min-width:190px;border-radius:10px;padding:6px">
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'services:tyre_list' %}">
+              🔧 Tyre Clinic
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'services:tyre_add' %}">
+              ＋ Record Tyre Service
+            </a>
+          </li>
+          <li><hr class="dropdown-divider" style="border-color:rgba(255,255,255,0.15)"></li>
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'services:battery_list' %}">
+              🔋 Battery Section
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'services:battery_add' %}">
+              ＋ Record Battery Service
+            </a>
+          </li>
+          {% if user.is_admin or user.is_manager %}
+          <li><hr class="dropdown-divider" style="border-color:rgba(255,255,255,0.15)"></li>
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'services:price_list' %}">
+              💰 Manage Prices
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </li>
+
+      <!-- Admin-only items -->
+      {% if user.is_admin %}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle px-3 py-2 rounded"
+           href="#" role="button" data-bs-toggle="dropdown"
+           style="color:{% if request.resolver_match.app_name == 'reports' or request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name != 'login' %}#fff{% else %}rgba(255,255,255,0.72){% endif %};
+                  background:{% if request.resolver_match.app_name == 'reports' or request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name != 'login' %}var(--pe-green-dark){% else %}transparent{% endif %};
+                  font-size:13.5px;font-weight:500">
+          🛡 Admin
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark border-0 shadow"
+            style="background:#1e3a8a;min-width:190px;border-radius:10px;padding:6px">
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'reports:dashboard' %}">
+              📊 Revenue Reports
+            </a>
+          </li>
+          <li><hr class="dropdown-divider" style="border-color:rgba(255,255,255,0.15)"></li>
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'accounts:user_list' %}">
+              👥 Manage Users
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item rounded py-2" style="color:rgba(255,255,255,0.85);font-size:13px"
+               href="{% url 'accounts:create_user' %}">
+              ＋ Add New User
+            </a>
+          </li>
+        </ul>
+      </li>
+      {% endif %}
+
+    </ul>
+
+    <!-- Right side — user info + logout -->
+    <div class="d-flex align-items-center gap-2 ms-auto">
+      <div class="text-end d-none d-lg-block">
+        <div style="font-size:13px;font-weight:600;color:#fff;line-height:1.2">
+          {{ user.get_full_name|default:user.username }}
+        </div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.5);font-family:monospace;text-transform:uppercase;letter-spacing:0.8px">
+          {{ user.get_role_display }}
+        </div>
+      </div>
+      <div style="width:34px;height:34px;border-radius:50%;background:var(--pe-green);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center">
+        {{ user.username|first|upper }}
+      </div>
+      <a href="{% url 'accounts:logout' %}" class="btn btn-sm btn-outline-light" style="font-size:12px">
+        ⏏ Logout
+      </a>
+    </div>
+  </div>
+</nav>
+{% endif %}
