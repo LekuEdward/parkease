@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 
+# Vehicle stores all registration data captured on arrival
 class Vehicle(models.Model):
     """A vehicle registered on arrival at the parking facility."""
 
