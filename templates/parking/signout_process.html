@@ -2,6 +2,7 @@
 {% load crispy_forms_tags static %}
 {% block title %}Process Sign-Out{% endblock %}
 {% block content %}
+{# Sign-out page — shows calculated fee and collects receiver details #}
 
 <div class="pe-page-header">
   <h1>↗ Process Sign-Out — <span class="pe-plate">{{ vehicle.plate_number }}</span></h1>
@@ -73,7 +74,7 @@
           <div class="pe-receipt__header">
             <img src="{% static 'assets/logo.png' %}" alt="ParkEase" style="width:48px;height:48px;border-radius:10px;object-fit:cover;margin:0 auto 8px;display:block">
             <div class="pe-receipt__company">PARKEASE SYSTEMS LTD</div>
-            <div class="pe-receipt__address">Plot 45, Kampala Road, Kampala</div>
+            <div class="pe-receipt__address">Kawagga Close, Muyenga, Kampala</div>
           </div>
           <hr class="pe-receipt__divider">
           <div class="pe-receipt__row"><span class="pe-receipt__row-label">Date:</span><span class="pe-receipt__row-value">{{ now|date:"d M Y" }}</span></div>
