@@ -19,7 +19,7 @@ def validate_name(value):
 def validate_phone(value):
     phone = value.strip().replace(' ', '').replace('+256', '0')
     if not re.match(r'^(07|06)\d{8}$', phone):
-        raise forms.ValidationError("Enter a valid Ugandan phone number (e.g. 0700123456).")
+        raise forms.ValidationError("Please Enter a valid phone number in this format(e.g. 0700123456).")
     return phone
 
 
