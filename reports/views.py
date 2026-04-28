@@ -5,7 +5,7 @@ from django.utils import timezone
 from parking.models import Vehicle, SignOut
 from services.models import ServiceTransaction
 
-
+# Reports are admin-only — access blocked for attendant and manager roles
 @login_required
 def dashboard(request):
     if not request.user.is_admin():
