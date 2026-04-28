@@ -65,15 +65,15 @@
     }
     .lp-chip__dot { width:7px; height:7px; border-radius:50%; background:#4ade80; }
 
-    /* ── Right form panel — WIDER ── */
+    /* ── Right form panel */
     .lp-right {
-      width: 520px;            /* wider than before */
+      width: 520px;            
       flex-shrink: 0;
       background: #fff;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 60px 56px;      /* more padding */
+      padding: 60px 56px;      
       box-shadow: -10px 0 48px rgba(0,0,0,0.18);
     }
     .lp-right__logo { text-align: center; margin-bottom: 36px; }
@@ -91,7 +91,7 @@
       color: #94a3b8; margin: 0;
     }
 
-    /* Make form fields bigger */
+    
     .lp-right .form-control,
     .lp-right input[type="text"],
     .lp-right input[type="password"] {
@@ -122,7 +122,7 @@
 <body>
 <div class="login-wrap">
 
-  <!-- LEFT — Night parking image -->
+
   <div class="lp-left">
     <div class="lp-left__bg"></div>
     <div class="lp-left__overlay"></div>
@@ -152,7 +152,7 @@
 
     {% if form.errors %}
     <div class="alert alert-danger mb-4" style="border-radius:10px;font-size:14px">
-      <strong>⚠ Invalid username or password.</strong> Please check and try again.
+      <strong>⚠ Invalid username or password.</strong> Please check enter a valid username/password and try again.
     </div>
     {% endif %}
 
@@ -174,25 +174,8 @@
       </button>
     </form>
 
-    <!-- 
-      NOTE FOR PRESENTER: Remove the block below before going live in production.
-      Demo credentials are shown here ONLY for evaluation/presentation purposes.
-    -->
-    <div class="mt-5 pt-4" style="border-top:1px dashed #e2e8f0">
-      <p style="font-family:monospace;font-size:10px;text-transform:uppercase;
-                letter-spacing:1.2px;color:#94a3b8;text-align:center;margin-bottom:14px">
-        Demo Accounts — For Evaluation Only
-      </p>
-      <div style="background:#f8fafc;border-radius:10px;padding:14px 18px;font-size:13px;
-                  font-family:monospace;color:#475569;line-height:2">
-        <div><strong style="color:var(--pe-navy)">admin</strong> / admin123 &nbsp;·&nbsp; System Admin</div>
-        <div><strong style="color:var(--pe-navy)">attendant</strong> / park2026 &nbsp;·&nbsp; Parking Attendant</div>
-        <div><strong style="color:var(--pe-navy)">manager</strong> / mgr2026 &nbsp;·&nbsp; Section Manager</div>
-      </div>
-    </div>
-
-    <p style="text-align:center;margin-top:28px;font-size:10px;color:#cbd5e1;font-family:monospace">
-      © 2026 ParkEase Systems Ltd. All rights reserved.
+    <p style="text-align:center;margin-top:28px;font-size:15px;color:#cbd5e1;font-family:monospace">
+      © 2026 ParkEase Systems Ltd. Leku Edward Shame. All rights reserved.
     </p>
   </div>
 </div>
