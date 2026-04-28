@@ -6,7 +6,7 @@ from .models import Vehicle, SignOut
 from .forms import VehicleRegistrationForm, VehicleEditForm, SignOutForm, VehicleSearchForm
 from services.models import ServiceTransaction
 
-
+# Fee rates in UGX — day/night/short stay per vehicle type
 PARKING_RATES = {
     'personal_car': {'day': 3000,  'night': 2000,  'short': 2000},
     'taxi':         {'day': 3000,  'night': 2000,  'short': 2000},
