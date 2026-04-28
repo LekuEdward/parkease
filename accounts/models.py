@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
+# CustomUser extends Django's AbstractUser with role-based access
 class CustomUser(AbstractUser):
     ROLE_CHOICES = [
         ('attendant', 'Parking Attendant'),
