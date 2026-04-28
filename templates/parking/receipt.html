@@ -3,6 +3,7 @@
 {% block title %}Receipt {{ signout.receipt_number }}{% endblock %}
 {% block content %}
 
+{# Printable receipt — shown after successful sign-out #}
 <div class="pe-page-header d-flex justify-content-between align-items-center no-print">
   <div>
     <h1>🧾 Parking Receipt</h1>
@@ -22,7 +23,7 @@
         <img src="{% static 'assets/logo.png' %}" alt="ParkEase">
         <div class="pe-receipt__company">PARKEASE SYSTEMS LTD</div>
         <div class="pe-receipt__address">
-          Plot 45, Kampala Road, Kampala, Uganda<br>
+          Plot -- Kawagga Close, Muyenga, Kampala, Uganda<br>
           TIN: 1009876543 · Tel: +256 414 000 000
         </div>
       </div>
