@@ -6,7 +6,7 @@ from .models import Vehicle, SignOut
 
 
 # ─────────────────────────────────────────────────────────
-#  Shared validation helpers
+#  Validation helpers
 # ─────────────────────────────────────────────────────────
 
 def validate_name(value, label="Name"):
@@ -117,7 +117,7 @@ class VehicleRegistrationForm(forms.ModelForm):
 
 
 # ─────────────────────────────────────────────────────────
-#  Vehicle Edit Form (same rules, reused)
+#  Vehicle Edit Form
 # ─────────────────────────────────────────────────────────
 
 class VehicleEditForm(VehicleRegistrationForm):
