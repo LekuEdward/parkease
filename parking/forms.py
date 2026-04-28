@@ -117,7 +117,7 @@ class VehicleRegistrationForm(forms.ModelForm):
 
 
 # ─────────────────────────────────────────────────────────
-#  Vehicle Edit Form (same rules, reused)
+#  Vehicle Edit Form
 # ─────────────────────────────────────────────────────────
 
 class VehicleEditForm(VehicleRegistrationForm):
