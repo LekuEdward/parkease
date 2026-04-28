@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-
+# ServicePrice stores tyre and battery prices set by the Section Manager
 class ServicePrice(models.Model):
     """Prices for tyre and battery services — set by the Section Manager."""
 
